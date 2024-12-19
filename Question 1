@@ -1,1 +1,19 @@
 PROBLEM 1: Sum of N Natural Number
+
+   #include<iostream>
+using namespace std;
+
+int main()
+{
+    int n,sum=0;
+    cout<<"enter the number:"<<endl;
+    cin>> n;
+
+    for(int i=0;i<=n;i++)
+    {
+        sum += i;
+    }
+
+    cout<<"Sum of N natural number be:"<<sum<<endl;
+    return 0;
+}
