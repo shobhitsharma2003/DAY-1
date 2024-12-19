@@ -1,0 +1,64 @@
+PROBLEM: Implement polymorphism for Banking Transaction
+CODE:
+   #include <iostream>
+   #include <vector>
+
+  using namespace std;
+
+class BankAccount {
+protected:
+    double balance;
+
+public:
+    BankAccount(double initial_balance) : balance(initial_balance) {}
+    virtual void applyTransaction() = 0;
+    double getBalance() const { return balance; }
+    virtual ~BankAccount() = default;
+};
+
+class Deposit : public BankAccount {
+    double amount;
+public:
+    Deposit(double initial_balance, double deposit_amount)
+        : BankAccount(initial_balance), amount(deposit_amount) {}
+    void applyTransaction() override {
+        balance += amount;
+        cout << "Deposited: $" << amount << " | New Balance: $" << balance << endl;
+    }
+};
+
+class Withdraw : public BankAccount {
+    double amount;
+public:
+    Withdraw(double initial_balance, double withdraw_amount)
+        : BankAccount(initial_balance), amount(withdraw_amount) {}
+    void applyTransaction() override {
+        if (amount <= balance) {
+            balance -= amount;
+            cout << "Withdrawn: $" << amount << " | New Balance: $" << balance << endl;
+        } else {
+            cout << "Insufficient funds for withdrawal of: $" << amount << endl;
+        }
+    }
+};
+
+int main() {
+    vector<BankAccount*> transactions;
+
+    // Manually create objects and store raw pointers
+    transactions.push_back(new Deposit(1000, 500));
+    transactions.push_back(new Withdraw(1500, 300));
+    transactions.push_back(new Withdraw(1000, 2000));
+
+    // Process all transactions
+    for (auto& t : transactions) {
+        t->applyTransaction();
+    }
+
+    // Free the allocated memory (important to avoid memory leaks)
+    for (auto& t : transactions) {
+        delete t;
+    }
+
+    return 0;
+}
